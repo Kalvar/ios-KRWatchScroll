@@ -1,28 +1,35 @@
-## Supports
+//
+//  ViewController.m
+//  KRWatchScroll
+//
+//  Created by Kalvar on 13/6/15.
+//  Copyright (c) 2013年 Kuo-Ming Lin. All rights reserved.
+//
 
-KRWatchScroll can easy watching UIScrollView is scrolling to top or bottom when it stopped, and KRWatchScroll can judge the UITableView scrolling to top or bottom.
-
-## How To Get Started
-
-This sample is using with UITableView.
-
-``` objective-c
+#import "ViewController.h"
 #import "KRWatchScroll.h"
 
-@interface ViewController ()<KRWatchScrollDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ViewController ()<KRWatchScrollDelegate>
 
 @property (nonatomic, strong) KRWatchScroll *_krWatchScroll;
 @property (nonatomic, strong) NSMutableArray *_datas;
-@property (nonatomic, weak) IBOutlet UITableView *outTableView;
 
 @end
 
 @implementation ViewController
 
+@synthesize outTableView;
+//
+@synthesize _krWatchScroll;
+@synthesize _datas;
+
+/*
+ * @ This sample is to watch UITableView.
+ */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _krWatchScroll = [[KRWatchScroll alloc] init];
+	_krWatchScroll = [[KRWatchScroll alloc] init];
     _datas         = [[NSMutableArray alloc] initWithCapacity:0];
     for( int i=1; i<=20; ++i )
     {
@@ -30,6 +37,12 @@ This sample is using with UITableView.
     }
     self.outTableView.dataSource = self;
     self.outTableView.delegate   = self;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    
 }
 
 #pragma UITableView Delegate
@@ -49,17 +62,16 @@ This sample is using with UITableView.
     static NSString *tempCellIdentifier = @"_tempCell";
     NSInteger row = [indexPath row];
     int dataCount = [self._datas count];
-    if (dataCount == 0 && row == 0)
+	if (dataCount == 0 && row == 0)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tempCellIdentifier];
-        if ( !cell )
-        {
+        if (cell == nil){
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:tempCellIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.detailTextLabel.text = @"Loading ...";
-        return cell;
+		cell.detailTextLabel.text = @"Loading ...";
+		return cell;
     }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if ( !cell )
@@ -112,12 +124,3 @@ This sample is using with UITableView.
 }
 
 @end
-```
-
-## Version
-
-KRWatchScroll now is V0.9 beta.
-
-## License
-
-KRWatchScroll is available under the MIT license ( or Whatever you wanna do ). See the LICENSE file for more info.
