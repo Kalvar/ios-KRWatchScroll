@@ -1,6 +1,6 @@
 //
 //  KRWatchScroll.m
-//  V0.9 beta
+//  V0.9.1 beta
 //
 //  Created by Kalvar on 13/6/15.
 //  Copyright (c) 2013年 Kuo-Ming Lin. All rights reserved.
@@ -22,8 +22,9 @@
 
 -(void)_initWithVars
 {
-    self.offsetTop    = 0.0f;
-    self.offsetBottom = 0.0f;
+    self.offsetTop         = 0.0f;
+    self.offsetBottom      = 0.0f;
+    self.watchHorizontally = NO;
 }
 
 @end
@@ -34,6 +35,7 @@
 @synthesize watchScrollView;
 @synthesize offsetTop;
 @synthesize offsetBottom;
+@synthesize watchHorizontally;
 
 -(id)init
 {
@@ -79,17 +81,41 @@
     CGRect _scrollViewBounds             = _scrollView.bounds;
     CGSize _scrollViewContentSize        = _scrollView.contentSize;
     UIEdgeInsets _scrollViewContentInset = _scrollView.contentInset;
-    float y = _scrollViewContentOffset.y + _scrollViewBounds.size.height - _scrollViewContentInset.top;
-    float h = _scrollViewContentSize.height;
-    //捲動到了頂端
-    if( _scrollViewContentOffset.y <= self.offsetTop )
+    if( self.watchHorizontally )
     {
-        _krWatchScrollType = KRWatchScrollToTop;
+        /*
+         * @ Calculate the Left ( also top ) and Right ( also bottom ).
+         */
+        float x = _scrollViewContentOffset.x + _scrollViewBounds.size.width - _scrollViewContentInset.left;
+        float w = _scrollViewContentSize.width;
+        //捲動到了最左邊( Top )
+        if( _scrollViewContentOffset.x <= self.offsetTop )
+        {
+            _krWatchScrollType = KRWatchScrollToLeft;
+        }
+        //捲動到了最右邊( Bottom )
+        if( x >= w + self.offsetBottom && _scrollViewContentOffset.x > 0.0f )
+        {
+            _krWatchScrollType = KRWatchScrollToRight;
+        }
     }
-    //捲動到了底部
-    if( y >= h + self.offsetBottom && _scrollViewContentOffset.y > 0.0f )
+    else
     {
-        _krWatchScrollType = KRWatchScrollToBottom;
+        /*
+         * @ Calculate the Top and Bottom.
+         */
+        float y = _scrollViewContentOffset.y + _scrollViewBounds.size.height - _scrollViewContentInset.top;
+        float h = _scrollViewContentSize.height;
+        //捲動到了頂端
+        if( _scrollViewContentOffset.y <= self.offsetTop )
+        {
+            _krWatchScrollType = KRWatchScrollToTop;
+        }
+        //捲動到了底部
+        if( y >= h + self.offsetBottom && _scrollViewContentOffset.y > 0.0f )
+        {
+            _krWatchScrollType = KRWatchScrollToBottom;
+        }
     }
     return _krWatchScrollType;
 }
@@ -168,6 +194,18 @@
             if( [_delegate respondsToSelector:@selector(krWatchScrollDidScrollToBottom)] )
             {
                 [_delegate krWatchScrollDidScrollToBottom];
+            }
+            break;
+        case KRWatchScrollToLeft:
+            if( [_delegate respondsToSelector:@selector(krWatchScrollDidScrollToLeft)] )
+            {
+                [_delegate krWatchScrollDidScrollToLeft];
+            }
+            break;
+        case KRWatchScrollToRight:
+            if( [_delegate respondsToSelector:@selector(krWatchScrollDidScrollToRight)] )
+            {
+                [_delegate krWatchScrollDidScrollToRight];
             }
             break;
         case KRWatchScrollNothing:

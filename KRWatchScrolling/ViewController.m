@@ -9,40 +9,87 @@
 #import "ViewController.h"
 #import "KRWatchScroll.h"
 
-@interface ViewController ()<KRWatchScrollDelegate>
+@interface ViewController ()
 
 @property (nonatomic, strong) KRWatchScroll *_krWatchScroll;
 @property (nonatomic, strong) NSMutableArray *_datas;
 
 @end
 
+@implementation ViewController (fixPrivate)
+
+-(void)_makeSubviewsInScrollView
+{
+    CGFloat _x       = 0.0f;
+    CGFloat _y       = 0.0f;
+    CGFloat _width   = 80.0f;
+    CGFloat _height  = 160.0f;
+    CGFloat _offsetX = 10.0f;
+    for( int _index=1; _index<20; _index++ )
+    {
+        UIImageView *_imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sample.png"]];
+        [_imageView setFrame:CGRectMake(_x, _y, _width, _height)];
+        [self.outScrollView addSubview:_imageView];
+        _x += _width + _offsetX;
+    }
+    [self.outScrollView setContentSize:CGSizeMake(_x, self.outScrollView.frame.size.height)];
+    self.outScrollView.scrollEnabled                  = YES;
+    self.outScrollView.showsVerticalScrollIndicator   = NO;
+    self.outScrollView.showsHorizontalScrollIndicator = NO;
+    self.outScrollView.backgroundColor                = [UIColor clearColor];
+    self.outScrollView.delegate                       = self;
+}
+
+-(void)_watchScrollView
+{
+    /*
+     * If you did set " watchHorizontally " is YES, it will be watching the UIScrollView for scrolling of horizontally.
+     * If you did set it to NO, it will be watching Vertically.
+     * YES 是監控橫向捲動的 UIScrollView 動作。
+     * NO  是監控直向捲動的 UIScrollView 動作。
+     */
+    self._krWatchScroll.watchHorizontally = YES;
+    [self _makeSubviewsInScrollView];
+}
+
+-(void)_watchTableView
+{
+    self._krWatchScroll.watchHorizontally = NO;
+    for( int i=1; i<=20; ++i )
+    {
+        [self._datas addObject:[NSString stringWithFormat:@"%i", i]];
+    }
+    self.outTableView.dataSource = self;
+    self.outTableView.delegate   = self;
+}
+
+@end
+
 @implementation ViewController
 
 @synthesize outTableView;
-//
+@synthesize outScrollView;
+
 @synthesize _krWatchScroll;
 @synthesize _datas;
 
 /*
- * @ This sample is to watch UITableView.
+ * @ This sample is to watch UITableView and UIScrollView.
  */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	_krWatchScroll = [[KRWatchScroll alloc] init];
     _datas         = [[NSMutableArray alloc] initWithCapacity:0];
-    for( int i=1; i<=20; ++i )
-    {
-        [_datas addObject:[NSString stringWithFormat:@"%i", i]];
-    }
-    self.outTableView.dataSource = self;
-    self.outTableView.delegate   = self;
+    //If you wanna watch UIScrollView that you can follow this.
+    [self _watchScrollView];
+    //If you wanna watch UITableView that you can follow this.
+    [self _watchTableView];
 }
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
-    
+    [super didReceiveMemoryWarning];    
 }
 
 #pragma UITableView Delegate
@@ -114,6 +161,14 @@
         case KRWatchScrollToBottom:
             //捲到底
             NSLog(@"Scrolling to Bottom.");
+            break;
+        case KRWatchScrollToLeft:
+            //捲到左邊
+            NSLog(@"Scrolling to Left.");
+            break;
+        case KRWatchScrollToRight:
+            //捲到右邊
+            NSLog(@"Scrolling to Right.");
             break;
         case KRWatchScrollNothing:
         default:

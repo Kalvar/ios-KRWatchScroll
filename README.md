@@ -1,6 +1,8 @@
 ## Supports
 
-KRWatchScroll can easy watching UIScrollView is scrolling to top or bottom when it stopped, and KRWatchScroll can judge the UITableView scrolling to top or bottom.
+KRWatchScroll can easy watching and judging UITableView ( or UIScrollView ) scrolling to top、bottom、left、right motions when it scroll stopped.
+
+So, you can easy use it to implement scrolling to load next or previous page data when scrollview scrolled to side.
 
 ## How To Get Started
 
@@ -9,27 +11,89 @@ This sample is using with UITableView.
 ``` objective-c
 #import "KRWatchScroll.h"
 
-@interface ViewController ()<KRWatchScrollDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) KRWatchScroll *_krWatchScroll;
 @property (nonatomic, strong) NSMutableArray *_datas;
 @property (nonatomic, weak) IBOutlet UITableView *outTableView;
+@property (nonatomic, weak) IBOutlet UIScrollView *outScrollView;
+
+@end
+
+@implementation ViewController (fixPrivate)
+
+-(void)_makeSubviewsInScrollView
+{
+    CGFloat _x       = 0.0f;
+    CGFloat _y       = 0.0f;
+    CGFloat _width   = 80.0f;
+    CGFloat _height  = 160.0f;
+    CGFloat _offsetX = 10.0f;
+    for( int _index=1; _index<20; _index++ )
+    {
+        UIImageView *_imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sample.png"]];
+        [_imageView setFrame:CGRectMake(_x, _y, _width, _height)];
+        [self.outScrollView addSubview:_imageView];
+        _x += _width + _offsetX;
+    }
+    [self.outScrollView setContentSize:CGSizeMake(_x, self.outScrollView.frame.size.height)];
+    self.outScrollView.scrollEnabled                  = YES;
+    self.outScrollView.showsVerticalScrollIndicator   = NO;
+    self.outScrollView.showsHorizontalScrollIndicator = NO;
+    self.outScrollView.backgroundColor                = [UIColor clearColor];
+    self.outScrollView.delegate                       = self;
+}
+
+-(void)_watchScrollView
+{
+    /*
+     * If you did set " watchHorizontally " is YES, it will be watching the UIScrollView for scrolling of horizontally.
+     * If you did set it to NO, it will be watching Vertically.
+     * YES 是監控橫向捲動的 UIScrollView 動作。
+     * NO  是監控直向捲動的 UIScrollView 動作。
+     */
+    self._krWatchScroll.watchHorizontally = YES;
+    [self _makeSubviewsInScrollView];
+}
+
+-(void)_watchTableView
+{
+    self._krWatchScroll.watchHorizontally = NO;
+    for( int i=1; i<=20; ++i )
+    {
+        [self._datas addObject:[NSString stringWithFormat:@"%i", i]];
+    }
+    self.outTableView.dataSource = self;
+    self.outTableView.delegate   = self;
+}
 
 @end
 
 @implementation ViewController
 
+@synthesize outTableView;
+@synthesize outScrollView;
+
+@synthesize _krWatchScroll;
+@synthesize _datas;
+
+/*
+ * @ This sample is to watch UITableView and UIScrollView.
+ */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     _krWatchScroll = [[KRWatchScroll alloc] init];
     _datas         = [[NSMutableArray alloc] initWithCapacity:0];
-    for( int i=1; i<=20; ++i )
-    {
-        [_datas addObject:[NSString stringWithFormat:@"%i", i]];
-    }
-    self.outTableView.dataSource = self;
-    self.outTableView.delegate   = self;
+    //If you wanna watch UIScrollView that you can follow this.
+    [self _watchScrollView];
+    //If you wanna watch UITableView that you can follow this.
+    [self _watchTableView];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];    
 }
 
 #pragma UITableView Delegate
@@ -52,8 +116,7 @@ This sample is using with UITableView.
     if (dataCount == 0 && row == 0)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tempCellIdentifier];
-        if ( !cell )
-        {
+        if (cell == nil){
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:tempCellIdentifier];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -103,6 +166,14 @@ This sample is using with UITableView.
             //捲到底
             NSLog(@"Scrolling to Bottom.");
             break;
+        case KRWatchScrollToLeft:
+            //捲到左邊
+            NSLog(@"Scrolling to Left.");
+            break;
+        case KRWatchScrollToRight:
+            //捲到右邊
+            NSLog(@"Scrolling to Right.");
+            break;
         case KRWatchScrollNothing:
         default:
             //Nothing
@@ -116,7 +187,7 @@ This sample is using with UITableView.
 
 ## Version
 
-KRWatchScroll now is V0.9 beta.
+KRWatchScroll now is V0.9.1 beta.
 
 ## License
 

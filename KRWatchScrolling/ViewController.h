@@ -14,5 +14,6 @@
 }
 
 @property (nonatomic, weak) IBOutlet UITableView *outTableView;
+@property (nonatomic, weak) IBOutlet UIScrollView *outScrollView;
 
 @end

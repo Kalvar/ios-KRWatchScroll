@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8EF976D717980F1E00B506E0 /* sample.png in Resources */ = {isa = PBXBuildFile; fileRef = 8EF976D617980F1E00B506E0 /* sample.png */; };
 		8EFFAECC176B8972008C8ECC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFFAECB176B8972008C8ECC /* UIKit.framework */; };
 		8EFFAECE176B8972008C8ECC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFFAECD176B8972008C8ECC /* Foundation.framework */; };
 		8EFFAED0176B8972008C8ECC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EFFAECF176B8972008C8ECC /* CoreGraphics.framework */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8EF976D617980F1E00B506E0 /* sample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample.png; sourceTree = "<group>"; };
 		8EFFAEC8176B8972008C8ECC /* KRWatchScrolling.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KRWatchScrolling.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EFFAECB176B8972008C8ECC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8EFFAECD176B8972008C8ECC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -56,9 +58,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8EF976D517980F1E00B506E0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				8EF976D617980F1E00B506E0 /* sample.png */,
+			);
+			name = Images;
+			path = KRWatchScrolling/Images;
+			sourceTree = "<group>";
+		};
 		8EFFAEBF176B8972008C8ECC = {
 			isa = PBXGroup;
 			children = (
+				8EF976D517980F1E00B506E0 /* Images */,
 				8EFFAEEE176B8984008C8ECC /* Classes */,
 				8EFFAED1176B8972008C8ECC /* KRWatchScrolling */,
 				8EFFAED2176B8972008C8ECC /* Supporting Files */,
@@ -178,6 +190,7 @@
 				8EFFAEE0176B8972008C8ECC /* Default@2x.png in Resources */,
 				8EFFAEE2176B8972008C8ECC /* Default-568h@2x.png in Resources */,
 				8EFFAEE8176B8972008C8ECC /* ViewController.xib in Resources */,
+				8EF976D717980F1E00B506E0 /* sample.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
