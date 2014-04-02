@@ -40,6 +40,7 @@ typedef enum _KRWatchScrollType
 @property (nonatomic, assign) CGFloat offsetBottom;
 @property (nonatomic, assign) BOOL watchHorizontally;
 
++(instancetype)sharedWatcher;
 -(id)initWithDelegate:(id<KRWatchScrollDelegate>)_theDelegate;
 -(void)startWatch;
 -(void)startWatchScrollView:(UIScrollView *)_scrollView;

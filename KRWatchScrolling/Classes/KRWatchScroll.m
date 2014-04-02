@@ -37,6 +37,16 @@
 @synthesize offsetBottom;
 @synthesize watchHorizontally;
 
++(instancetype)sharedWatcher
+{
+    static dispatch_once_t pred;
+    static KRWatchScroll *_singleton = nil;
+    dispatch_once(&pred, ^{
+        _singleton = [[KRWatchScroll alloc] init];
+    });
+    return _singleton;
+}
+
 -(id)init
 {
     self = [super init];

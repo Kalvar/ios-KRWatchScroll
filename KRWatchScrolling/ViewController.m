@@ -79,11 +79,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	_krWatchScroll = [[KRWatchScroll alloc] init];
+	_krWatchScroll = [KRWatchScroll sharedWatcher];
     _datas         = [[NSMutableArray alloc] initWithCapacity:0];
-    //If you wanna watch UIScrollView that you can follow this.
+    
+    //Choose either one.
+    //1. If you wanna watch UIScrollView that you can follow this.
     [self _watchScrollView];
-    //If you wanna watch UITableView that you can follow this.
+    
+    //2. If you wanna watch UITableView that you can follow this.
     [self _watchTableView];
 }
 
